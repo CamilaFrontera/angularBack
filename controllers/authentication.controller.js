@@ -117,7 +117,7 @@ const  login = async (req, res = response) =>{
 const authenticate = (req, res = response) =>{
     return res.json({
         status: true,
-        msg: 'Renovar.'
+        msg: 'Renew.'
     });
 }
 
