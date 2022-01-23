@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const {response} = require('express');
+const { exists } = require('../models/User');
 const User = require('../models/User');
 const { generateJWT } = require('../utilities/JWT');
 
@@ -49,7 +50,7 @@ const register = async (req, res = response) =>{
 
     //respuesta success
         return res.status(201).json({
-            ok: true,
+            status: true,
             uid: databaseUser.id,
             username,
             email,
@@ -69,14 +70,47 @@ const register = async (req, res = response) =>{
 
 
 //funcion acceder(login)
-const login = (req, res = response) =>{
+const  login = async (req, res = response) =>{
     
-    const {email, password} = req.body;
+    const {username, password} = req.body;
     
-    return res.json({
-        status: true,
-        msg: 'Login de usuario'
-    })
+    
+    try{
+
+        const dbUser = await User.findOne({username: username});
+        
+        if(!dbUser){
+            return res.status(400).json({
+                status: false,
+                msg: "The typed username doesn't exist."
+            })
+        }
+
+        const validPassword  = bcrypt.compareSync(password, dbUser.password);
+
+        if(!validPassword){
+            return res.status(400).json({
+                status: false,
+                msg: "The typed password isn't valid."
+            })
+        }
+
+        const token = await generateJWT(dbUser.id,  dbUser);
+
+        return res.json({
+            status: true,
+            uid: dbUser.id,
+            username,
+            token
+        });
+
+    }catch(err){
+        console.log(err);
+        return res.json({
+            status: false,
+            msg: "We couldn't log you in. Please contact administrator."
+        })
+    }
 }
 
 //funcion validar(validation)
@@ -84,7 +118,7 @@ const authenticate = (req, res = response) =>{
     return res.json({
         status: true,
         msg: 'Renovar.'
-    })
+    });
 }
 
 //exports

@@ -18,7 +18,7 @@ router.post('/register', [
 
 //ruta para loin
 router.post('/login',[
-    check('email', 'The email field is required.').isEmail(),
+    check('username', 'The username field is required.').isLength({min: 3}),
     check('password', 'The password field is required.').isLength({min: 4}),
     fieldValidation
 ] , login);
