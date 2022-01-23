@@ -2,7 +2,8 @@
 const {Router} = require('express');
 const { check } = require('express-validator');
 const { register, authenticate, login } = require('../controllers/authentication.controller');
-const { fieldValidation } = require('../middlewares/field-validation')
+const { fieldValidation } = require('../middlewares/field-validation');
+const { jwtValidation } = require('../middlewares/jwt-validation');
 
 const router = Router();
 
@@ -24,7 +25,7 @@ router.post('/login',[
 ] , login);
 
 //ruta para validar
-router.get('/validation', authenticate);
+router.get('/revalidate', jwtValidation, authenticate);
 
 
 

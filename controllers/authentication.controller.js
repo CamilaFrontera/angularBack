@@ -115,9 +115,13 @@ const  login = async (req, res = response) =>{
 
 //funcion validar(validation)
 const authenticate = (req, res = response) =>{
+
+    const { uid, name } = req;
+
     return res.json({
         status: true,
-        msg: 'Renew.'
+        uid, name
+        
     });
 }
 
