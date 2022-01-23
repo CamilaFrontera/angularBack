@@ -1,5 +1,7 @@
+const bcrypt = require('bcryptjs');
 const {response} = require('express');
 const User = require('../models/User');
+const { generateJWT } = require('../utilities/JWT');
 
 //funcion crear usuario(register)
 const register = async (req, res = response) =>{
@@ -10,41 +12,57 @@ const register = async (req, res = response) =>{
 
     //verificamos que el username sea unico
 
-        let user = await User.findOne({username: username});
-        if(user){
+        let userUsername = await User.findOne({username: username});
+        if(userUsername){
             return res.status(400).json({
                 status: false,
                 msg:'This username is taken. Please try a different one.'
             });
         }
 
-    //creamos user con el modelo creado
-        const databaseUser = new User(req.body);
+   
     //verificamos si el email ya existe
+        let userEmail = await User.findOne({email: email});
+        if(userEmail){
+            return res.status(400).json({
+                status: false,
+                msg:'There is already an existing account with this email.'
+            });
+        }
+
+     //creamos user con el modelo creado
+     const databaseUser = new User(req.body);
+        
        
 
-    //hashear la contraseña
+        //hashear la contraseña
+            const salt = bcrypt.genSaltSync(10);
+            databaseUser.password = bcrypt.hashSync(password, salt);
+
+
 
     //generamos JWT
+        const token = await generateJWT(databaseUser.id, name, lastname);
 
     //creamos user en database
         await databaseUser.save();
 
     //respuesta success
         return res.status(201).json({
-            status: true,
+            ok: true,
             uid: databaseUser.id,
-            username: databaseUser.username,
-            email: databaseUser.email
+            username,
+            email,
+            token
         })
     
 
     }catch(err){
-        
-    return res.json({
-        status: ok,
-        msg: "There's been a problem with the register."
-    })
+        console.log(err);
+        return res.json({
+            status: false,
+            msg: "There's been a problem with the register."
+        })
     }
     
 }
