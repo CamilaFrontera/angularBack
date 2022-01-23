@@ -118,9 +118,11 @@ const authenticate = (req, res = response) =>{
 
     const { uid, name } = req;
 
+    const token = await generateJWT(uid.id,  name);
+
     return res.json({
         status: true,
-        uid, name
+        uid, name, token
         
     });
 }
