@@ -114,7 +114,7 @@ const  login = async (req, res = response) =>{
 }
 
 //funcion validar(validation)
-const authenticate = (req, res = response) =>{
+const authenticate = async (req, res = response) =>{
 
     const { uid, name } = req;
 
