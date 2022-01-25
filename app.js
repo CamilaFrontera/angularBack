@@ -12,10 +12,12 @@ const app = express();
 //conexion a database
 dataBaseConnection();
 
+app.use(cors());
 
 app.use(express.static('public'))
 
-const whitelist = ['http://localhost:4200/'];
+
+
 
 //MIDDLEWARES////////////////////////////////////////////////////
 //parseo
@@ -23,7 +25,6 @@ app.use(express.json());
 //rutas
 app.use('/users', require('./routes/authentication'));
 //aplicamos cors para acceder desde cualquier dominio
-app.use(cors({origin: whitelist}));
 
 
 ///////////////////////////////////////////////////////////////////////
