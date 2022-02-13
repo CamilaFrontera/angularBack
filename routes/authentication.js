@@ -1,6 +1,7 @@
 //Importo lo necesario
 const {Router} = require('express');
 const { check } = require('express-validator');
+const {addToCart, clearCart,getCart,removeFromCart} = require('../controllers/cart.controller')
 const { register, authenticate, login } = require('../controllers/authentication.controller');
 const { fieldValidation } = require('../middlewares/field-validation');
 const { jwtValidation } = require('../middlewares/jwt-validation');
@@ -27,7 +28,27 @@ router.post('/login',[
 //ruta para validar
 router.get('/revalidate', jwtValidation, authenticate);
 
+//carrito
+router.get('cart',[
+    getCart
+]);
 
+router.post('cart',[addToCart]);
+
+router.delete('cart',[
+    removeFromCart
+]);
+
+router.delete('cart/clear',[
+    clearCart
+])
+// app.route('/api/cart')
+// .get(checkToken, getCart)          
+// .post(checkToken, addToCart)     
+// .delete(checkToken, removeFromCart)    
+
+// app.route('/api/cart/clear')  
+// .delete(clearCart)
 
 //exporto router
 module.exports = router;
