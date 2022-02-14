@@ -29,17 +29,17 @@ router.post('/login',[
 router.get('/revalidate', jwtValidation, authenticate);
 
 //carrito
-router.get('cart',[
+router.get('/cart',[
     getCart
 ]);
 
-router.post('cart',[addToCart]);
+router.post('/cart',[addToCart]);
 
-router.delete('cart',[
+router.delete('/cart',[
     removeFromCart
 ]);
 
-router.delete('cart/clear',[
+router.delete('/cart/clear',[
     clearCart
 ])
 // app.route('/api/cart')

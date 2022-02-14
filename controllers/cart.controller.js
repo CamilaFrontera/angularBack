@@ -9,37 +9,35 @@ const getCart = (req, res) => {
 const addToCart = (req, res) => {
     const itemToAdd = req.body;
 
-    if (cartContent.findIndex(movie => movie.id === itemToAdd.id) < 0) {
+    if (cartContent.findIndex(movie => movie.imdbID === itemToAdd.id) < 0){
         cartContent.push(itemToAdd);   
         res.send({
-            status: "OK-ADDED",
-            description: "ADD MOVIE",
+            status: true,
             cartContent
         });
     } else {
         res.send({
-            status: "NOT OK",
-            description: "NOT ADDING - MOVIE ALLREADY EXIST",
+            status: false,
+            description: "The movie that you're trying to add already exists in cart.",
             cartContent
         });
     }
 }
 
 const removeFromCart = (req, res) => {
-    const urlId = req.query.id;
-    const indextoRemove = cartContent.findIndex(movie => movie.id === urlId);
+    
+    const indextoRemove = cartContent.findIndex(movie => movie.imdbID === movie.id);
 
     if (indextoRemove >= 0) {
         cartContent.splice(indextoRemove, 1);
         res.send({
-            status: "OK-DELETED",
-            description: "DELETED MOVIE",
+            status: true,
             cartContent
         });
     } else {
         res.send({
-            status: "NOT OK",
-            description: "MOVIE NOT FOUND TO ERASE",
+            status: false,
+            description: "We're sorry, we coulnd't find that movie.",
             cartContent
         });
     }
@@ -49,8 +47,7 @@ const removeFromCart = (req, res) => {
 const clearCart = (req, res) => {
     cartContent = [];
     res.send({
-        status: "OK",
-        description: "CART WAS EMPTY",
+        status: true,
         cartContent
     });
 }
