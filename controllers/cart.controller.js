@@ -8,15 +8,17 @@ const getCart = (req, res) => {
 
 const addToCart = (req, res) => {
     const itemToAdd = req.body;
-
-    if (cartContent.findIndex(movie => movie.imdbID === itemToAdd.id) < 0){
+    console.log(itemToAdd)
+    if (cartContent.findIndex(movie => movie.imdbID === itemToAdd.imdbID) < 0){
         cartContent.push(itemToAdd);   
         res.send({
             status: true,
             cartContent
         });
     } else {
+        console.log('No se pudo agregar'),
         res.send({
+            
             status: false,
             description: "The movie that you're trying to add already exists in cart.",
             cartContent
@@ -26,7 +28,7 @@ const addToCart = (req, res) => {
 
 const removeFromCart = (req, res) => {
     
-    const indextoRemove = cartContent.findIndex(movie => movie.imdbID === movie.id);
+    const indextoRemove = cartContent.findIndex(movie => movie.imdbID === movie.imdbID);
 
     if (indextoRemove >= 0) {
         cartContent.splice(indextoRemove, 1);
@@ -41,7 +43,7 @@ const removeFromCart = (req, res) => {
             cartContent
         });
     }
-
+    cartContent.forEach(movie=> console.log(movie))
 }
 
 const clearCart = (req, res) => {
